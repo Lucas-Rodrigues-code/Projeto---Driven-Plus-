@@ -24,7 +24,8 @@ export default function Cadastro() {
             .then(() => {
                 navigate("/")
             })
-            .catch(() => {
+            .catch((res) => {
+                console.log(res)
                 alert("Opss! Algo deu errado, verifique seus dados")
                 window.location.reload()
             })

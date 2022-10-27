@@ -1,18 +1,34 @@
 import styled from "styled-components"
 import logo from "../Img/Driven.png"
 
+import { useEffect, useState } from "react"
+import { useNavigate, Link } from 'react-router-dom';
+import axios from "axios";
+
 import React, { useContext } from 'react';
 import { UserContext } from "../Context/Context";
 
-export default function Login(){
+
+export default function Login() {
 
     const [email, setEmail] = useState("")
     const [senha, setSenha] = useState("")
 
+    const navigate = useNavigate()
+
     const { login, setLogin } = useContext(UserContext);
 
+    useEffect(()=>{
+        if(login !== null ){
+            navigate("/subscriptions")
+        }
+
+
+    },[])
     function fazerLogin(e) {
         e.preventDefault()
+
+
         const body = {
             email: email,
             password: senha
@@ -20,26 +36,34 @@ export default function Login(){
         }
         const requisicao = axios.post("https://mock-api.driven.com.br/api/v4/driven-plus/auth/login", body)
         requisicao.then((res) => {
-            setLogin(res.data)
-            navigate("/subscriptions")
+             setLogin(res.data) 
+
+            if (res.data.membership === null) {
+                navigate("/subscriptions")
+            } else {
+                navigate("/home")
+            }
+
         })
 
-        requisicao.catch(() => {
+        requisicao.catch((res) => {
+
             alert("Opss! Email ou senha errados")
             window.location.reload()
         })
     }
 
-    return(
+    return (
         <Container>
-            <img src={logo}/>
+            <img src={logo} />
             <Formulario>
-               <input type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)}/>
-               <input type="password" placeholder="Senha" value={senha} onChange={e => setSenha(e.target.value)}/>
-               <button onClick={fazerLogin}>ENTRAR</button>
+                <input type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)} />
+                <input type="password" placeholder="Senha" value={senha} onChange={e => setSenha(e.target.value)} />
+                <button onClick={fazerLogin}>ENTRAR</button>
             </Formulario>
-            <h1>Não possuí uma conta? Cadastre-se</h1>
-
+            <Link to={"/sign-up"}>
+                <h1>Não possuí uma conta? Cadastre-se</h1>
+            </Link>
         </Container>
     )
 }

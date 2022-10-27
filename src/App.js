@@ -1,34 +1,30 @@
-import Cadastro from "./Cadastro";
-import Home from "./Home";
-import Login from "./Login";
-import Plano from "./Plano";
-import Planos from "./Planos";
+import Cadastro from "./Components/Cadastro";
+import Home from "./Components/Home";
+import Login from "./Components/Login";
+import Plano from "./Components/Plano";
+import Planos from "./Components/Planos";
 
 import { createGlobalStyle } from 'styled-components'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import UserContext from "../Context/Context"
-import { useState } from "react";
+import UserProvider from "/home/lucas/projetos/driven-plus/src/Context/Context.js";
 
 export default function App() {
 
-    const [login, setLogin] = useState(null)
-
     return (
-        <>
+        <UserProvider>
             <GlobalStyle />
             <BrowserRouter>
                 <Routes>
-                    <UserContext.Provider value={{login, setLogin}}>
-                        <Route path="/" element={<Login />} />
-                        <Route path="/sign-up" element={<Cadastro />} />
-                        <Route path="/subscriptions/ID_DO_PLANO" element={<Plano />} />
-                        <Route path="/subscriptions" element={<Planos />} />
-                        <Route path="/home" element={<Home />} />
-                    </UserContext.Provider>
+                    <Route path="/" element={<Login />} />
+                    <Route path="/sign-up" element={<Cadastro />} />
+                    <Route path="/subscriptions/:ID_DO_PLANO" element={<Plano />} />
+                    <Route path="/subscriptions" element={<Planos />} />
+                    <Route path="/home" element={<Home />} />
                 </Routes>
             </BrowserRouter>
-        </>
+        </UserProvider>
+
+
     )
 }
 
