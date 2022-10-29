@@ -11,16 +11,12 @@ import { UserContext } from "../Context/Context"
 
 export default function Planos() {
 
-
-
-
     const [plano, setPlano] = useState("")
-
 
     const { login } = useContext(UserContext);
 
     const navigate = useNavigate()
-    console.log(plano[0]?.id)
+    
 
     useEffect(() => {
 
@@ -42,7 +38,7 @@ export default function Planos() {
     useEffect(() => {
         const request = axios.get("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions/memberships", config)
         request.then((res) => {
-
+            console.log(res.data)
             setPlano(res.data)
         })
         request.catch((res) => {
@@ -52,7 +48,15 @@ export default function Planos() {
 
 
 
-    }, [])
+    }, [login])
+
+    if (plano === null) {
+        return (
+            <ContainerLoading>
+                <img src="https://media.tenor.com/UnFx-k_lSckAAAAM/amalie-steiness.gif" />
+            </ContainerLoading>
+        )
+    }
 
 
     return (
@@ -60,19 +64,19 @@ export default function Planos() {
             <h1>Escolha seu Plano</h1>
             <Link to={`/subscriptions/${plano[0]?.id}`} >
                 <Plano>
-                    <img src={planoPlus} />
+                    <img src={planoPlus} alt="Plano Plus"/>
                     <h2>R$ {plano[0]?.price}</h2>
                 </Plano>
             </Link>
             <Link to={`/subscriptions/${plano[1]?.id}`}>
                 <Plano>
-                    <img src={plano2} />
+                    <img src={plano2} alt="Plano Platinium"/>
                     <h2>R$ {plano[1]?.price}</h2>
                 </Plano>
             </Link>
             <Link to={`/subscriptions/${plano[2]?.id}`}>
                 <Plano>
-                    <img src={plano3} />
+                    <img src={plano3} alt="Plano Gold"/>
                     <h2>R$ {plano[2]?.price}</h2>
                 </Plano>
             </Link>
@@ -120,5 +124,13 @@ const Plano = styled.div`
         color: #FFFFFF;
         padding-left:20px;
     }
+
+`
+const ContainerLoading = styled.div`
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:700px;
+
 
 `

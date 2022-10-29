@@ -21,10 +21,10 @@ export default function Cadastro() {
 
         }
         const requisicao = axios.post("https://mock-api.driven.com.br/api/v4/driven-plus/auth/sign-up", body)
-            .then(() => {
+        requisicao.then(() => {
                 navigate("/")
             })
-            .catch((res) => {
+        requisicao.catch((res) => {
                 console.log(res)
                 alert("Opss! Algo deu errado, verifique seus dados")
                 window.location.reload()
@@ -83,6 +83,7 @@ const Formulario = styled.div`
         height:52px;
         background: #FFFFFF;
         border-radius: 8px;
+        border: none;
 
         ::placeholder{ 
             color:#7E7E7E;
@@ -109,5 +110,6 @@ const Formulario = styled.div`
         line-height: 16px;
 
         color: #FFFFFF;
+        border: none;
     }
 `

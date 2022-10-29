@@ -55,7 +55,7 @@ export default function Login() {
 
     return (
         <Container>
-            <img src={logo} />
+            <img src={logo} alt="Logo"/>
             <Formulario>
                 <input type="email" placeholder="E-mail" value={email} onChange={e => setEmail(e.target.value)} />
                 <input type="password" placeholder="Senha" value={senha} onChange={e => setSenha(e.target.value)} />
@@ -107,6 +107,7 @@ const Formulario = styled.div`
         height:52px;
         background: #FFFFFF;
         border-radius: 8px;
+        border: none;
 
         ::placeholder{ 
             color:#7E7E7E;
@@ -133,5 +134,6 @@ const Formulario = styled.div`
         line-height: 16px;
 
         color: #FFFFFF;
+        border: none;
     }
 `
