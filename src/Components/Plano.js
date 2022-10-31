@@ -8,8 +8,6 @@ import { FaMoneyBillWave } from 'react-icons/fa';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { MdOutlineCancelPresentation } from 'react-icons/md';
 
-
-
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -22,32 +20,26 @@ import { Link } from 'react-router-dom';
 
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router-dom';
+
+Modal . setAppElement(".root")
+
 export default function Plano() {
 
     const navigate = useNavigate()
    
-
     const [modalIsOpen, setIsOpen] = useState(false);
 
-
-    
-
     const    {
+        login,
         plano,setPlano,
         nomeCartao,setNomeCartao,
         digitoCartao,setDigitoCartao,
         codigo,setCodigo,
         validade,setValidade,
-        planoEscolhido, setPlanoEscolhido
+        setPlanoEscolhido
     } = useContext(UserContext);
 
-
-
     const { ID_DO_PLANO } = useParams();
-
-    const { login } = useContext(UserContext);
-
-
 
     useEffect(() => {
         const config = {
@@ -59,6 +51,9 @@ export default function Plano() {
         request.then((res) => {
             setPlano(res.data)
 
+            
+           
+
         })
         request.catch((res) => {
             console.log(res, "erro")
@@ -68,16 +63,13 @@ export default function Plano() {
 
     }, [])
 
-
-
-
     function assinar() {
         
         const body = {
             membershipId: plano.id,
             cardName: nomeCartao,
             cardNumber: digitoCartao,
-            securityNumber: codigo,
+            securityNumber: parseInt(codigo),
             expirationDate: validade
         }
 
@@ -88,8 +80,9 @@ export default function Plano() {
         }
         const request = axios.post("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions", body, config)
         request.then((res) => {
-            console.log(res.data)
-            setPlanoEscolhido(res.data)
+           
+            setPlanoEscolhido(res.data) 
+            
             navigate("/home")
 
         })
@@ -113,7 +106,7 @@ export default function Plano() {
     if (plano === null) {
         return (
             <ContainerLoading>
-                <img src="https://media.tenor.com/UnFx-k_lSckAAAAM/amalie-steiness.gif" />
+                <img src="https://media.tenor.com/UnFx-k_lSckAAAAM/amalie-steiness.gif" alt="loading"/>
             </ContainerLoading>
         )
     }
@@ -143,10 +136,10 @@ export default function Plano() {
                 <ContLogo>
                     {
                         plano?.id === 1
-                            ? <img src={planoPlus} />
+                            ? <img src={planoPlus} alt="plano PLus"/>
                             : plano?.id === 2
-                                ? <img src={planoGold} />
-                                : <img src={planoPlatinum} />
+                                ? <img src={planoGold} alt="plano Gold"/>
+                                : <img src={planoPlatinum} alt="plano Planoplatinum"/>
                     }
                     {
                         plano?.id === 1

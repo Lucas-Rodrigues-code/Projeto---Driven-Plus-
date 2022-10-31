@@ -8,7 +8,6 @@ import axios from "axios";
 import React, { useContext } from 'react';
 import { UserContext } from "../Context/Context";
 
-
 export default function Login() {
 
     const [email, setEmail] = useState("")
@@ -19,12 +18,13 @@ export default function Login() {
     const { login, setLogin } = useContext(UserContext);
 
     useEffect(()=>{
+
         if(login !== null ){
             navigate("/subscriptions")
         }
 
-
     },[])
+    
     function fazerLogin(e) {
         e.preventDefault()
 

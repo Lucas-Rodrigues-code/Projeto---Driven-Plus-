@@ -13,10 +13,15 @@ export default function UserProvider({ children }) {
 
     const [nomeCartao, setNomeCartao] = useState("")
     const [digitoCartao, setDigitoCartao] = useState("")
-    const [codigo, setCodigo] = useState()
+    const [codigo, setCodigo] = useState("")
     const [validade, setValidade] = useState("")
 
-    const [planoEscolhido, setPlanoEscolhido] = useState()
+   /*  const listaPlano = localStorage.getItem("plano");
+    const planoDeserializado = JSON.parse(listaPlano) */
+
+    const [planoEscolhido, setPlanoEscolhido] = useState(null)
+
+   /*  localStorage.setItem("plano", JSON.stringify(planoEscolhido)) */
 
     const [plano, setPlano] = useState(null)
 

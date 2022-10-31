@@ -12,11 +12,10 @@ import axios from "axios"
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
-    const { login } = useContext(UserContext);
-   
 
-    const    {
-        plano, setPlano,
+    const {
+        login,
+        plano,
         nomeCartao,
         digitoCartao,
         codigo,
@@ -24,24 +23,24 @@ export default function Home() {
         planoEscolhido,
     } = useContext(UserContext);
 
-    console.log(planoEscolhido,"here")
+
     const navigate = useNavigate()
 
-    function cancelarPlano(){
+    function cancelarPlano() {
         const config = {
             headers: {
                 "Authorization": `Bearer ${login.token}`
             }
         }
-        const deletar = axios.delete("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions",config)
-        deletar.then((res)=> {
-            console.log(res.data,"aqui")
+        const deletar = axios.delete("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions", config)
+        deletar.then((res) => {
+            console.log(res.data, "aqui")
             navigate("/subscriptions")
         })
-        deletar.catch(()=> alert("erro"))
+        deletar.catch(() => alert("erro"))
     }
 
-    function mudarPlano(){
+    function mudarPlano() {
         const config = {
             headers: {
                 "Authorization": `Bearer ${login.token}`
@@ -49,50 +48,54 @@ export default function Home() {
         }
 
         const body = {
-            membershipId: login.membership.id,
+            membershipId: planoEscolhido.id,
             cardName: nomeCartao,
             cardNumber: digitoCartao,
             securityNumber: codigo,
             expirationDate: validade
         }
 
-        const requisicao = axios.post("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions",body,config)
-        requisicao.then(()=> {
+        const requisicao = axios.post("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions", body, config)
+        requisicao.then(() => {
             navigate("/subscriptions")
         })
-        requisicao.catch(()=> alert("erro"))
+        requisicao.catch(() => alert("erro"))
     }
-    
-    if(planoEscolhido === null){
-        return <div>caregando....</div>
+    console.log(planoEscolhido)
+    if (planoEscolhido === null) {
+        return (
+            <ContainerLoading>
+                <img src="https://media.tenor.com/UnFx-k_lSckAAAAM/amalie-steiness.gif" alt="loading" />
+            </ContainerLoading>
+        )
     }
 
     return (
         <>
             <ContainerLOgo>
-                 {
-                        plano?.id === 1
-                            ? <img src={planoPlus} />
-                            : plano?.id === 2
-                                ? <img src={planoGold} />
-                                : <img src={planoPlatinum} />
-                    }
+                {
+                    plano?.id === 1
+                        ? <img src={planoPlus} alt="plano PLus" />
+                        : plano?.id === 2
+                            ? <img src={planoGold} alt="plano Gold" />
+                            : <img src={planoPlatinum} alt="plano Planoplatinum" />
+                }
                 <User>
-                    <img src={user} />
+                    <img src={user} alt="user" />
                 </User>
 
 
             </ContainerLOgo>
             <ContainerBeneficios>
                 <h1>Olá, {login?.name}</h1>
-                
-                {login.membership.perks.map((perk, i) => <Beneficios><a href={perk.link}>{perk.title}</a></Beneficios>)}
+
+                {planoEscolhido.membership.perks.map((perk, i) => <Beneficios key={i}><a href={perk.link}>{perk.title}</a></Beneficios>)}
             </ContainerBeneficios>
             <ContBotao>
                 <BotaoMudar onClick={mudarPlano}>Mudar plano</BotaoMudar>
                 <BotaoCancelar onClick={cancelarPlano}>Cancelar plano</BotaoCancelar>
             </ContBotao>
-           
+
         </>
     )
 }
@@ -204,7 +207,6 @@ const BotaoMudar = styled.button`
     color: #FFFFFF;
     border: none;
 `
-
 const BotaoCancelar = styled.button`
     width: 299px;
     height: 52px;
@@ -222,5 +224,13 @@ const BotaoCancelar = styled.button`
 
     color: #FFFFFF;
     border: none;
+
+`
+const ContainerLoading = styled.div`
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:700px;
+
 
 `

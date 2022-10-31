@@ -8,13 +8,12 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from "../Context/Context"
 
-
 export default function Planos() {
 
     const [plano, setPlano] = useState("")
 
     const { login } = useContext(UserContext);
-
+   
     const navigate = useNavigate()
     
 
@@ -29,16 +28,18 @@ export default function Planos() {
 
     }, [])
 
-    const config = {
-        headers: {
-            "Authorization": `Bearer ${login.token}`
-        }
-    }
+   
 
     useEffect(() => {
+
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${login.token}`
+            }
+        }
         const request = axios.get("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions/memberships", config)
         request.then((res) => {
-            console.log(res.data)
+            
             setPlano(res.data)
         })
         request.catch((res) => {
@@ -53,7 +54,7 @@ export default function Planos() {
     if (plano === null) {
         return (
             <ContainerLoading>
-                <img src="https://media.tenor.com/UnFx-k_lSckAAAAM/amalie-steiness.gif" />
+                <img src="https://media.tenor.com/UnFx-k_lSckAAAAM/amalie-steiness.gif" alt="loading"/>
             </ContainerLoading>
         )
     }
