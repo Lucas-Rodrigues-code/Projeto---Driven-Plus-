@@ -30,7 +30,7 @@ export default function Plano() {
     const [modalIsOpen, setIsOpen] = useState(false);
 
     const    {
-        login,
+        login,setLogin,
         plano,setPlano,
         nomeCartao,setNomeCartao,
         digitoCartao,setDigitoCartao,
@@ -80,7 +80,13 @@ export default function Plano() {
         }
         const request = axios.post("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions", body, config)
         request.then((res) => {
-           
+           console.log(res.data)
+           const listaLogin = localStorage.getItem("login");
+            const loginDeserializado = JSON.parse(listaLogin)
+            loginDeserializado.membership = res.data.membership
+            localStorage.setItem("login", JSON.stringify(loginDeserializado))
+            setLogin(loginDeserializado)
+            console.log(loginDeserializado)
             setPlanoEscolhido(res.data) 
             
             navigate("/home")
@@ -150,7 +156,7 @@ export default function Plano() {
                     }
                 </ContLogo>
                 <ContInfo>
-                    <HiOutlineClipboardList color=" #FF4791" />
+                    <HiOutlineClipboardList color=" #FF4791" onClick={closeModal}/>
                     <span>Benefícios:</span>
                     {plano?.perks.map((perk, i) => <h3 key={i}>{i + 1}. {perk.title}</h3>)}
 

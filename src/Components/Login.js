@@ -18,12 +18,18 @@ export default function Login() {
     const { login, setLogin } = useContext(UserContext);
 
     useEffect(()=>{
+        console.log(login)
+        if(login === null) return
+        
+        if(login.membership !== null){
+            navigate("/home")
+        }
 
         if(login !== null ){
             navigate("/subscriptions")
         }
 
-    },[])
+    },[login])
     
     function fazerLogin(e) {
         e.preventDefault()

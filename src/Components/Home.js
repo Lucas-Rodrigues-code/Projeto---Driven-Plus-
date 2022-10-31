@@ -5,7 +5,7 @@ import planoPlatinum from "../Img/Group 3.png"
 import planoGold from "../Img/Group 2.png"
 import user from "../Img/Vector.png"
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { UserContext } from "../Context/Context";
 import axios from "axios"
 
@@ -13,18 +13,36 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
 
+    
+
     const {
-        login,
+        login,setLogin,
         plano,
         nomeCartao,
         digitoCartao,
         codigo,
         validade,
-        planoEscolhido,
+        planoEscolhido,setPlanoEscolhido
     } = useContext(UserContext);
 
 
     const navigate = useNavigate()
+
+
+    useEffect(()=>{
+        console.log(login)
+        console.log(planoEscolhido)
+        if(planoEscolhido !== null){
+        planoEscolhido.membership = login.membership
+        
+        setPlanoEscolhido(planoEscolhido)
+    } else {
+        
+        setPlanoEscolhido(login)
+    }
+        
+
+    },[login,planoEscolhido])
 
     function cancelarPlano() {
         const config = {
@@ -35,31 +53,40 @@ export default function Home() {
         const deletar = axios.delete("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions", config)
         deletar.then((res) => {
             console.log(res.data, "aqui")
+            login.membership = null;
+            setLogin(login)
             navigate("/subscriptions")
         })
         deletar.catch(() => alert("erro"))
     }
 
     function mudarPlano() {
-        const config = {
+        login.membership = null
+        setLogin(login)
+
+        navigate("/subscriptions")
+        /* const config = {
             headers: {
                 "Authorization": `Bearer ${login.token}`
             }
         }
-
+        console.log(config)
         const body = {
             membershipId: planoEscolhido.id,
-            cardName: nomeCartao,
-            cardNumber: digitoCartao,
-            securityNumber: codigo,
-            expirationDate: validade
+            cardName: "Fulano Da Silva",
+            cardNumber: "1234 1234 1234 1234",
+            securityNumber: 123 ,
+            expirationDate: "01/28"
+        
         }
+
+        console.log(body)
 
         const requisicao = axios.post("https://mock-api.driven.com.br/api/v4/driven-plus/subscriptions", body, config)
         requisicao.then(() => {
             navigate("/subscriptions")
         })
-        requisicao.catch(() => alert("erro"))
+        requisicao.catch(() => alert("erro")) */
     }
     console.log(planoEscolhido)
     if (planoEscolhido === null) {
@@ -87,7 +114,7 @@ export default function Home() {
 
             </ContainerLOgo>
             <ContainerBeneficios>
-                <h1>Olá, {login?.name}</h1>
+                <h1>Olá, {login.name}</h1>
 
                 {planoEscolhido.membership.perks.map((perk, i) => <Beneficios key={i}><a href={perk.link}>{perk.title}</a></Beneficios>)}
             </ContainerBeneficios>
